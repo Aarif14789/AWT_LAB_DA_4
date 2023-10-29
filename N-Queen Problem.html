@@ -1,0 +1,162 @@
+<!--21MID0043  ARIF.K   N-QUEENS PROBLEM..-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21MID0043_N-Queens Problem</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: darkslategrey;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        h1 {
+            color: white;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            gap: 1px;
+            margin: 20px auto;
+            border: 1px solid black;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+        }
+
+        .queen {
+            color: red;
+            font-size: 30px;
+        }
+
+        button {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #start {
+            background-color: mediumseagreen;
+            color: white;
+            border: none;
+        }
+
+        #reset {
+            background-color: tomato;
+            color: white;
+            border: none;
+        }
+
+        #congratulations,
+        #try-again {
+            font-size: 24px;
+            font-weight: bold;
+            color: limegreen;
+            margin-top: 20px;
+            display: none;
+        }
+
+        p {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>N-Queens Problem</h1>
+    <button id="start">Start</button>
+    <button id="reset">Reset</button>
+    <div class="board" id="board"></div>
+    <div id="congratulations">Congratulations! You solved the N-Queens problem!</div>
+    <div id="try-again">Try again!</div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to check if placing a queen at (row, col) is safe
+            function isSafe(board, row, col) {
+                for (let i = 0; i < col; i++) {
+                    if (board[row][i]) return false; // Check row conflict
+                    if (board[i][col]) return false; // Check column conflict
+                    if (board[i][col - i + row] || board[i][col + i - row]) return false; // Check diagonal conflict
+                }
+                return true;
+            }
+
+            // Function to create the chessboard
+            function createBoard() {
+                let $board = $('#board');
+                for (let i = 0; i < n; i++) {
+                    for (let j = 0; j < n; j++) {
+                        $board.append(`<div id="cell-${i}-${j}" class="cell"></div>`);
+                    }
+                }
+                // Event handler for cell clicks
+                $('.cell').click(function() {
+                    let [row, col] = this.id.split('-').slice(1).map(Number);
+                    if (userPlacedQueens.some(coord => coord.startsWith(`row-${row}`) || coord.endsWith(`col-${col}`) || coord.includes(`diagonal1-${row+col}`) || coord.includes(`diagonal2-${row-col}`))) {
+                        $('#try-again').show();
+                        $('#congratulations').hide();
+                    } else {
+                        if ($(this).html() == '') {
+                            userPlacedQueens.push(`row-${row} col-${col} diagonal1-${row+col} diagonal2-${row-col}`);
+                            $(this).html('<span class="queen">&#9819;</span>');
+                            $('#try-again').hide();
+                        } else {
+                            userPlacedQueens = userPlacedQueens.filter(coord => !coord.includes(`row-${row}`) && !coord.includes(`col-${col}`) && !coord.includes(`diagonal1-${row+col}`) && !coord.includes(`diagonal2-${row-col}`));
+                            $(this).html('');
+                        }
+                        if (userPlacedQueens.length == n) {
+                            $('#try-again').hide();
+                            $('#congratulations').show();
+                        }
+                    }
+                });
+            }
+
+            $('#start').click(function() {
+                $('#board').empty();
+                $('#congratulations').hide();
+                $('#try-again').hide();
+                userPlacedQueens = [];
+                createBoard();
+            });
+
+            $('#reset').click(function() {
+                $('#board').empty();
+                $('#congratulations').hide();
+                $('#try-again').hide();
+                userPlacedQueens = [];
+                createBoard();
+            });
+
+            const n = 8; // Change this value for different board sizes
+            let userPlacedQueens = [];
+        });
+    </script>
+    <footer>
+        <p>&copy; 2023 Made by Aarif..</p>
+    </footer>
+</body>
+</html>
